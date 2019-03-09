@@ -3,6 +3,23 @@ import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
+
+  state = { selectedFile: null }
+
+  fileChangedHandler = event => {
+    this.setState({selectedFile: event.target.files[0]})
+  }
+
+  uploadHandler = () => {
+    console.log(this.state.selectedFile)
+    // TODO: Change to client side or other server
+    // axios.post('my-domain.com/file-upload', this.state.selectedFile, {
+    //   onUploadProgress: progressEvent => {
+    //     console.log(progressEvent.loaded / progressEvent.total)
+    //   }
+    // })
+  }
+
   render() {
     return (
       <div className="App">
@@ -11,14 +28,22 @@ class App extends Component {
           <p>
             Edit <code>src/App.js</code> and save to reload.
           </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
+         
+          <input
+            id="diagnostic_image"
+            name="diagnostic_image"
+            type="file"
+            accept="image/png, image/jpeg, image/heic"
+            onChange={this.fileChangedHandler}
+            alt="diagnostic"
+          ></input>
+
+          <button
+            onClick={this.uploadHandler}
+          > 
+            Upload! 
+          </button>
+
         </header>
       </div>
     );
