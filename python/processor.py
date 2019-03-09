@@ -1,17 +1,18 @@
+from copy import deepcopy
 import cv2
 import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
 
 
-def process_image(filename):
+def process_image(filename, _type):
     image = np.array(Image.open(filename))
     # image = lips_canny(image)
     fragment = 50
     image = cv2.resize(image,(300,300))[fragment:-fragment,fragment:-fragment]
 
     # image = lips_canny(image)
-    image = analyse(image)
+    image = analyse(image, _type)
     plt.imshow(image)
     plt.show()
     #plt.savefig(filename + "test2.PNG")
@@ -33,7 +34,7 @@ def lips_canny(image):
     print(circles)
     return edge_detected_image
 
-def analyse(image):
+def analyse(image, _type):
     RED, GREEN, BLUE = (2, 1, 0)
     reds = image[:, :, RED]
     greens = image[:, :, GREEN]
@@ -52,16 +53,16 @@ def analyse(image):
     dominant = palette[np.argmax(counts)]
     print(palette)
 
-    mask = get_mask("cancer", greens, reds, blues, average)
-
+    mask = get_mask(_type, greens, reds, blues, average)
     image[~mask] = (255, 0, 0, 255)
+    
     return image
 
-def get_mask(t, greens, reds, blues, average):
-    if (t == "lips"):
+def get_mask(_type, greens, reds, blues, average):
+    if (_type == "lips"):
         mask = (greens < average[0]) | (reds < average[1]) | (blues < average[2])
-    if (t == "tongue_patches"):
+    if (_type == "tongue"):
         mask = (greens < 130) | (blues < 130) | (reds < 130)
-    if (t == "cancer"):
+    if (_type == "gums"):
         mask = (greens > 100) | (blues > 100) | (reds > 100)
     return mask
