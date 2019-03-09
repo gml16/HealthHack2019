@@ -2,7 +2,7 @@ from processor import process_image
 
 
 def main():
-    filename = "../diagnostic_uploads/syphilis2.PNG"
+    filename = "../diagnostic_uploads/syphilis3.png"
     res = process_image(filename)
     print(res)
 

@@ -10,6 +10,7 @@ def process_image(filename):
 
     image = lips_canny(image)
     plt.imshow(image)
+    plt.show()
     #plt.savefig(filename + "test2.PNG")
     return filename
 
@@ -57,5 +58,5 @@ def get_mask(t, greens, reds, blues, average):
     if (t == "lips"):
         mask = (greens < average[0]) | (reds < average[1]) | (blues < average[2])
     if (t == "tongue_patches"):
-        mask = (greens < 140) | (blues < 140)
+        mask = (greens < 140) | (blues < 140) | (reds < 140)
     return mask
