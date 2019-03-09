@@ -5,6 +5,9 @@ def main():
     gums = "../diagnostic_uploads/cancer1.png"
     cancer = process_image(gums, "gums")
 
+    tongue_ulcer = "../diagnostic_uploads/syphilis2.png"
+    syphilis = process_image(tongue, "tongue_ulcer")
+
     tongue = "../diagnostic_uploads/syphilis3.png"
     syphilis = process_image(tongue, "tongue")
 

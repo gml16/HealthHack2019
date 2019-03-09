@@ -63,6 +63,8 @@ def get_mask(_type, greens, reds, blues, average):
         mask = (greens < average[0]) | (reds < average[1]) | (blues < average[2])
     if (_type == "tongue"):
         mask = (greens < 130) | (blues < 130) | (reds < 130)
+    if (_type == "tongue_ulcer"):
+        mask = (greens < 130) | (blues < 130) | (reds < 130)
     if (_type == "gums"):
         mask = (greens > 100) | (blues > 100) | (reds > 100)
     return mask
