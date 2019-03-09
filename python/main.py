@@ -6,10 +6,10 @@ def main():
     cancer = process_image(gums, "gums")
 
     tongue_ulcer = "../diagnostic_uploads/syphilis2.png"
-    syphilis = process_image(tongue, "tongue_ulcer")
+    syphilis_1 = process_image(tongue_ulcer, "tongue_ulcer")
 
-    tongue = "../diagnostic_uploads/syphilis3.png"
-    syphilis = process_image(tongue, "tongue")
+    tongue_patch = "../diagnostic_uploads/syphilis3.png"
+    syphilis_2 = process_image(tongue_patch, "tongue_patch")
 
     lips = "../diagnostic_uploads/herpes4.png"
     herpes = process_image(lips, "lips")

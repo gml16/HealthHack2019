@@ -61,7 +61,7 @@ def analyse(image, _type):
 def get_mask(_type, greens, reds, blues, average):
     if (_type == "lips"):
         mask = (greens < average[0]) | (reds < average[1]) | (blues < average[2])
-    if (_type == "tongue"):
+    if (_type == "tongue_patch"):
         mask = (greens < 130) | (blues < 130) | (reds < 130)
     if (_type == "tongue_ulcer"):
         mask = (greens < 130) | (blues < 130) | (reds < 130)
