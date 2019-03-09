@@ -6,8 +6,9 @@ import matplotlib.pyplot as plt
 def process_image(filename):
     image = np.array(Image.open(filename))
     # image = lips_canny(image)
+    image = cv2.resize(image,(300,300))
 
-    image = analyse(image)
+    image = lips_canny(image)
     plt.imshow(image)
     #plt.savefig(filename + "test2.PNG")
     return filename
@@ -18,9 +19,14 @@ def lips_canny(image):
     bilateral_filtered_image = cv2.fastNlMeansDenoisingColored(image,None,15,10,7,21)
     cv2.imshow('Edge', bilateral_filtered_image)
     cv2.waitKey(0)
-    edge_detected_image = cv2.Canny(bilateral_filtered_image, 50, 70)
+    edge_detected_image = cv2.Canny(bilateral_filtered_image, 30, 35)
     cv2.imshow('Edge', edge_detected_image)
     cv2.waitKey(0)
+    gray = cv2.cvtColor(edge_detected_image, cv2.COLOR_BGR2GRAY)
+    circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1.2, 100)
+    #c = plt.Circle((circles[0,0, 0],circles[0,0,1]), circles[0,0,2])
+    #cv2.circle(img, center, radius
+    print(circles)
     return edge_detected_image
 
 def analyse(image):
