@@ -24,6 +24,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Upload your image" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xwa-le-Asg">
+                                <rect key="frame" x="70.666666666666686" y="84" width="234" height="31"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="26"/>
+                                <color key="textColor" red="0.25882352939999997" green="0.3294117647" blue="0.72549019609999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="14" translatesAutoresizingMaskIntoConstraints="NO" id="vuE-Wz-6Y9">
                                 <rect key="frame" x="62.666666666666657" y="155" width="249.99999999999997" height="136"/>
                                 <subviews>
@@ -80,6 +86,25 @@
                                     </view>
                                 </subviews>
                             </stackView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="openMouth" translatesAutoresizingMaskIntoConstraints="NO" id="yZJ-im-Lrg">
+                                <rect key="frame" x="87.666666666666686" y="321" width="200" height="200"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="dMI-Ft-KBL"/>
+                                    <constraint firstAttribute="height" constant="200" id="jpk-Cb-rHO"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="bottom" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ObG-rb-esw">
+                                <rect key="frame" x="87.666666666666686" y="321" width="200" height="250"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="250" id="Qn9-qW-bvC"/>
+                                </constraints>
+                                <state key="normal" title="Select image">
+                                    <color key="titleColor" red="0.25882352939999997" green="0.3294117647" blue="0.72549019609999998" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="chooseImagePressed:" destination="mZw-rJ-7zb" eventType="touchUpInside" id="tSy-zt-jsI"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Eh6-nI-beu" customClass="RoundedButton" customModule="Smack" customModuleProvider="target">
                                 <rect key="frame" x="62.666666666666657" y="708" width="249.99999999999997" height="50"/>
                                 <color key="backgroundColor" red="0.25882352939999997" green="0.3294117647" blue="0.72549019609999998" alpha="1" colorSpace="calibratedRGB"/>
@@ -97,56 +122,29 @@
                                         <real key="value" value="5"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Upload your image" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xwa-le-Asg">
-                                <rect key="frame" x="70.666666666666686" y="84" width="234" height="31"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="26"/>
-                                <color key="textColor" red="0.25882352939999997" green="0.3294117647" blue="0.72549019609999998" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fet-C9-dsV">
-                                <rect key="frame" x="343" y="44" width="16" height="22"/>
-                                <state key="normal" image="closeButton"/>
-                            </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="openMouth" translatesAutoresizingMaskIntoConstraints="NO" id="yZJ-im-Lrg">
-                                <rect key="frame" x="87.666666666666686" y="321" width="200" height="200"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="200" id="dMI-Ft-KBL"/>
-                                    <constraint firstAttribute="height" constant="200" id="jpk-Cb-rHO"/>
-                                </constraints>
-                            </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="bottom" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ObG-rb-esw">
-                                <rect key="frame" x="87.666666666666686" y="321" width="200" height="250"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="250" id="Qn9-qW-bvC"/>
-                                </constraints>
-                                <state key="normal" title="Select image">
-                                    <color key="titleColor" red="0.25882352939999997" green="0.3294117647" blue="0.72549019609999998" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
                                 <connections>
-                                    <action selector="chooseImagePressed:" destination="mZw-rJ-7zb" eventType="touchUpInside" id="tSy-zt-jsI"/>
+                                    <action selector="UploadImagesPressed:" destination="mZw-rJ-7zb" eventType="touchUpInside" id="hp6-3J-Ftz"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="Eh6-nI-beu" firstAttribute="centerX" secondItem="vS4-LK-w6T" secondAttribute="centerX" id="03H-jK-Qqu"/>
-                            <constraint firstItem="Xwa-le-Asg" firstAttribute="top" secondItem="vCS-MB-LWs" secondAttribute="bottom" constant="40" id="0Dw-Tn-1Vk"/>
+                            <constraint firstItem="Xwa-le-Asg" firstAttribute="top" secondItem="ev5-tx-SXJ" secondAttribute="top" constant="40" id="0Dw-Tn-1Vk"/>
                             <constraint firstItem="ObG-rb-esw" firstAttribute="top" secondItem="yZJ-im-Lrg" secondAttribute="top" id="0Pw-1I-lJ8"/>
                             <constraint firstItem="yZJ-im-Lrg" firstAttribute="top" secondItem="vuE-Wz-6Y9" secondAttribute="bottom" constant="30" id="1aa-8E-o0n"/>
                             <constraint firstItem="ObG-rb-esw" firstAttribute="centerX" secondItem="vS4-LK-w6T" secondAttribute="centerX" id="2t5-B0-Oyt"/>
-                            <constraint firstItem="RqA-nh-w0Q" firstAttribute="top" secondItem="Eh6-nI-beu" secondAttribute="bottom" constant="20" id="Cyq-XN-wGP"/>
+                            <constraint firstItem="ev5-tx-SXJ" firstAttribute="bottom" secondItem="Eh6-nI-beu" secondAttribute="bottom" constant="20" id="Cyq-XN-wGP"/>
                             <constraint firstItem="ObG-rb-esw" firstAttribute="width" secondItem="yZJ-im-Lrg" secondAttribute="width" id="OTU-jS-hZl"/>
                             <constraint firstItem="vuE-Wz-6Y9" firstAttribute="top" secondItem="Xwa-le-Asg" secondAttribute="bottom" constant="40" id="ROL-jF-Bau"/>
-                            <constraint firstItem="fet-C9-dsV" firstAttribute="trailing" secondItem="vS4-LK-w6T" secondAttribute="trailingMargin" id="Sxi-jb-Pv0"/>
                             <constraint firstItem="vuE-Wz-6Y9" firstAttribute="centerX" secondItem="vS4-LK-w6T" secondAttribute="centerX" id="VYy-DG-0vS"/>
-                            <constraint firstItem="fet-C9-dsV" firstAttribute="top" secondItem="vCS-MB-LWs" secondAttribute="bottom" id="ZTm-KO-BeK"/>
                             <constraint firstItem="Xwa-le-Asg" firstAttribute="centerX" secondItem="vS4-LK-w6T" secondAttribute="centerX" id="d0q-H9-0ca"/>
                             <constraint firstItem="yZJ-im-Lrg" firstAttribute="centerX" secondItem="vS4-LK-w6T" secondAttribute="centerX" id="ygM-un-4Lo"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="ev5-tx-SXJ"/>
                     </view>
                     <connections>
+                        <outlet property="UploadHHBtn" destination="Eh6-nI-beu" id="TQO-b8-Fif"/>
                         <outlet property="ageTxtField" destination="5B5-NO-uW0" id="g7f-Da-1zu"/>
                         <outlet property="genderTxtField" destination="WIG-rO-8hh" id="l57-Tf-rnf"/>
                         <outlet property="otherTxtField" destination="xzn-TY-1og" id="Anw-0P-y7m"/>
@@ -159,7 +157,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="closeButton" width="16" height="16"/>
         <image name="openMouth" width="512" height="512"/>
     </resources>
 </document>
