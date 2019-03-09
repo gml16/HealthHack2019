@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A8E4EF102233FA2000BC5DB0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E4EF0F2233FA2000BC5DB0 /* AppDelegate.swift */; };
-		A8E4EF122233FA2000BC5DB0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E4EF112233FA2000BC5DB0 /* ViewController.swift */; };
+		A8E4EF122233FA2000BC5DB0 /* ImageUploadVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E4EF112233FA2000BC5DB0 /* ImageUploadVC.swift */; };
 		A8E4EF152233FA2000BC5DB0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A8E4EF132233FA2000BC5DB0 /* Main.storyboard */; };
 		A8E4EF182233FA2000BC5DB0 /* HealthHack19.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A8E4EF162233FA2000BC5DB0 /* HealthHack19.xcdatamodeld */; };
 		A8E4EF1A2233FA2600BC5DB0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8E4EF192233FA2600BC5DB0 /* Assets.xcassets */; };
@@ -37,7 +37,7 @@
 /* Begin PBXFileReference section */
 		A8E4EF0C2233FA2000BC5DB0 /* HealthHack19.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HealthHack19.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8E4EF0F2233FA2000BC5DB0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		A8E4EF112233FA2000BC5DB0 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		A8E4EF112233FA2000BC5DB0 /* ImageUploadVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUploadVC.swift; sourceTree = "<group>"; };
 		A8E4EF142233FA2000BC5DB0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A8E4EF172233FA2000BC5DB0 /* HealthHack19.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = HealthHack19.xcdatamodel; sourceTree = "<group>"; };
 		A8E4EF192233FA2600BC5DB0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -100,7 +100,7 @@
 			isa = PBXGroup;
 			children = (
 				A8E4EF0F2233FA2000BC5DB0 /* AppDelegate.swift */,
-				A8E4EF112233FA2000BC5DB0 /* ViewController.swift */,
+				A8E4EF112233FA2000BC5DB0 /* ImageUploadVC.swift */,
 				A8E4EF132233FA2000BC5DB0 /* Main.storyboard */,
 				A8E4EF192233FA2600BC5DB0 /* Assets.xcassets */,
 				A8E4EF1B2233FA2600BC5DB0 /* LaunchScreen.storyboard */,
@@ -259,7 +259,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A8E4EF122233FA2000BC5DB0 /* ViewController.swift in Sources */,
+				A8E4EF122233FA2000BC5DB0 /* ImageUploadVC.swift in Sources */,
 				A8E4EF182233FA2000BC5DB0 /* HealthHack19.xcdatamodeld in Sources */,
 				A8E4EF102233FA2000BC5DB0 /* AppDelegate.swift in Sources */,
 			);
@@ -439,6 +439,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = MFQ5H64W53;
 				INFOPLIST_FILE = HealthHack19/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -446,7 +447,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.SamuelMartinFrias.HealthHack19;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -457,6 +458,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = MFQ5H64W53;
 				INFOPLIST_FILE = HealthHack19/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -464,7 +466,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.SamuelMartinFrias.HealthHack19;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
