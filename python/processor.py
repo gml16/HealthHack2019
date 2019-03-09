@@ -5,7 +5,9 @@ import matplotlib.pyplot as plt
 
 def process_image(filename):
     image = np.array(Image.open(filename))
-    image = lips_canny(image)
+    # image = lips_canny(image)
+
+    image = analyse(image)
     plt.imshow(image)
     #plt.savefig(filename + "test2.PNG")
     return filename
@@ -21,7 +23,7 @@ def lips_canny(image):
     cv2.waitKey(0)
     return edge_detected_image
 
-def analyse_lips(image):
+def analyse(image):
     RED, GREEN, BLUE = (2, 1, 0)
     reds = image[:, :, RED]
     greens = image[:, :, GREEN]
@@ -40,7 +42,14 @@ def analyse_lips(image):
     dominant = palette[np.argmax(counts)]
     print(palette)
 
+    mask = get_mask("tongue_patches", greens, reds, blues, average)
 
-    mask = (greens < average[0]) | (reds < average[1]) | (blues < average[2])
     image[mask] = (0, 0, 0, 255)
     return image
+
+def get_mask(t, greens, reds, blues, average):
+    if (t == "lips"):
+        mask = (greens < average[0]) | (reds < average[1]) | (blues < average[2])
+    if (t == "tongue_patches"):
+        mask = (greens < 140) | (blues < 140)
+    return mask
