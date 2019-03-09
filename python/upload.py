@@ -1,6 +1,7 @@
 import os
-from flask import Flask, flash, request, redirect, url_for, send_from_directory
+from flask import Flask, flash, request, redirect, url_for, send_from_directory, render_template
 from werkzeug.utils import secure_filename
+from processor import process_image
 
 UPLOAD_FOLDER = '../diagnostic_uploads'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'heic'])
@@ -42,6 +43,5 @@ def upload_file():
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
-
-    return send_from_directory(app.config['UPLOAD_FOLDER'],
-                               filename)
+    res = process_image(filename)
+    return render_template('processing.html', file_name = filename)
