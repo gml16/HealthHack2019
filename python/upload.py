@@ -1,8 +1,8 @@
 import os
-from flask import Flask, flash, request, redirect, url_for
+from flask import Flask, flash, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = '../diagn_uploads'
+UPLOAD_FOLDER = '../diagnostic_uploads'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'heic'])
 
 app = Flask(__name__)
@@ -39,3 +39,9 @@ def upload_file():
       <input type=submit value=Upload>
     </form>
     '''
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+
+    return send_from_directory(app.config['UPLOAD_FOLDER'],
+                               filename)
