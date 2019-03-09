@@ -39,9 +39,3 @@ def upload_file():
       <input type=submit value=Upload>
     </form>
     '''
-
-def main():
-    hello()
-
-if __name__ == "__main__":
-    main()
