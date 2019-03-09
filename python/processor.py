@@ -4,6 +4,47 @@ import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
 
+# from skimage import data, color
+# from skimage.transform import hough_circle, hough_circle_peaks
+# from skimage.feature import canny
+# from skimage.draw import circle_perimeter
+# from skimage.util import img_as_ubyte
+
+
+# # Load picture and detect edges
+# image = data.load("/Users/remiuzel/Documents/Scolarité/2016-2020 Imperial College London/2018-2019 3nd Year JMC/HealthHack2019/diagnostic_uploads/syphilis1.png")[:,:,0]
+# cv2.imshow('Edge', image)
+# cv2.waitKey(0)
+# image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
+# cv2.imshow('Edge', image)
+# cv2.waitKey(0)
+# image = cv2.fastNlMeansDenoisingColored(image,None,15,10,7,21)
+# cv2.imshow('Edge', image)
+# cv2.waitKey(0)
+# image = img_as_ubyte(image)[:,:,0]
+# cv2.imshow('Edge', image)
+# cv2.waitKey(0)
+# edges = canny(image, sigma=3, low_threshold=10, high_threshold=50)
+
+
+# # Detect two radii
+# hough_radii = np.arange(20, 35, 2)
+# hough_res = hough_circle(edges, hough_radii)
+
+# # Select the most prominent 5 circles
+# accums, cx, cy, radii = hough_circle_peaks(hough_res, hough_radii,
+#                                            total_num_peaks=3)
+
+# # Draw them
+# fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(10, 4))
+# image = color.gray2rgb(image)
+# for center_y, center_x, radius in zip(cy, cx, radii):
+#     circy, circx = circle_perimeter(center_y, center_x, radius)
+#     image[circy, circx] = (220, 20, 20)
+
+# ax.imshow(image, cmap=plt.cm.gray)
+# plt.show()
+
 
 def process_image(filename, _type):
     image = np.array(Image.open(filename))
