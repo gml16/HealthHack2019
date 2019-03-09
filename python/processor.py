@@ -7,15 +7,21 @@ def process_image(filename):
     image = np.array(Image.open(filename))
     image = lips_canny(image)
     plt.imshow(image)
-    plt.savefig(filename + "test2.PNG")
-    #image[mask] = (0, 255, 0, 255)
-    #print(image)
+    #plt.savefig(filename + "test2.PNG")
     return filename
 
 def lips_canny(image):
-    bilateral_filtered_image = cv2.bilateralFilter(image, 5, 175, 175)
-    edge_detected_image = cv2.Canny(bilateral_filtered_image, 75, 200)
-    cv2.imshow('Edge', edge_detected_image)
+    image = image[: , :, :3]
+    bilateral_filtered_image = cv2.GaussianBlur(image,(5,5),0)
+    #bilateral_filtered_image = cv2.bilateralFilter(image, 3, 300, 300)
+    cv2.imshow('Edge', bilateral_filtered_image)
+    cv2.waitKey(0)
+    for i in range(25,250,20):
+        for j in range(i,250,20):
+            print("i and j", i, j)
+            edge_detected_image = cv2.Canny(bilateral_filtered_image, i, j)
+            cv2.imshow('Edge', edge_detected_image)
+            cv2.waitKey(0)
     return edge_detected_image
 
 def analyse_lips(image):
@@ -23,8 +29,6 @@ def analyse_lips(image):
     reds = image[:, :, RED]
     greens = image[:, :, GREEN]
     blues = image[:, :, BLUE]
-    #mask = (greens < 35) | (reds > greens) | (blues > greens)
-    #mask = (greens > 100) & (reds > 100) & (blues > 100)
     average = image.mean(axis=0).mean(axis=0)
 
     pixels = np.float32(image.reshape(-1, 4))
