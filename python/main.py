@@ -13,7 +13,7 @@ def main():
 
     lips = "../diagnostic_uploads/herpes4.png"
     herpes = process_image(lips, "lips")
-    print(res)
+    
 
 if __name__ == "__main__":
     main()
