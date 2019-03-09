@@ -12,16 +12,13 @@ def process_image(filename):
 
 def lips_canny(image):
     image = image[: , :, :3]
-    bilateral_filtered_image = cv2.GaussianBlur(image,(5,5),0)
-    #bilateral_filtered_image = cv2.bilateralFilter(image, 3, 300, 300)
+    # = cv2.bilateralFilter(image, 5, 150, 150)
+    bilateral_filtered_image = cv2.fastNlMeansDenoisingColored(image,None,15,10,7,21)
     cv2.imshow('Edge', bilateral_filtered_image)
     cv2.waitKey(0)
-    for i in range(25,250,20):
-        for j in range(i,250,20):
-            print("i and j", i, j)
-            edge_detected_image = cv2.Canny(bilateral_filtered_image, i, j)
-            cv2.imshow('Edge', edge_detected_image)
-            cv2.waitKey(0)
+    edge_detected_image = cv2.Canny(bilateral_filtered_image, 50, 70)
+    cv2.imshow('Edge', edge_detected_image)
+    cv2.waitKey(0)
     return edge_detected_image
 
 def analyse_lips(image):
