@@ -18,6 +18,8 @@ class ImageUploadVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
     @IBOutlet weak var genderTxtField: UITextField!
     @IBOutlet weak var otherTxtField: UITextField!
     @IBOutlet weak var userImage: UIImageView!
+    @IBOutlet weak var UploadHHBtn: RoundedButton!
+    
     
     
     
@@ -55,6 +57,12 @@ class ImageUploadVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
         present(logoutPopup, animated: true, completion: nil)
         
     }
+    
+    @IBAction func UploadImagesPressed(_ sender: Any) {
+        //TODO upload picture and proces
+        
+    }
+    
     
     
     func setupView() {
@@ -100,7 +108,7 @@ class ImageUploadVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
         }
         
         if let selImage = selectedImage{
-            userImage.contentMode = .scaleToFill
+            userImage.contentMode = .scaleAspectFill
             userImage.image = selImage
             image = selImage
         } else {
@@ -109,6 +117,7 @@ class ImageUploadVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
         
         dismiss(animated: true, completion: nil)
     }
+    
     
     func checkPermission(){
         switch AVCaptureDevice.authorizationStatus(for: .video) {
