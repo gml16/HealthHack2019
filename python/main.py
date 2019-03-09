@@ -9,7 +9,7 @@ def main():
     # TODO - DETECT OVAL INSTEAD OF APPLYING MASK
     syphilis_1 = process_image(tongue_ulcer, "tongue_ulcer") 
 
-    tongue_patch = "../diagnostic_uploads/syphilis3.png"
+    tongue_patch = "../diagnostic_uploads/syphilis1.png"
     syphilis_2 = process_image(tongue_patch, "tongue_patch")
 
     lips = "../diagnostic_uploads/herpes4.png"
