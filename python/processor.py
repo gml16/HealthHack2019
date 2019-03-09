@@ -3,12 +3,15 @@ import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
 
+
 def process_image(filename):
     image = np.array(Image.open(filename))
     # image = lips_canny(image)
-    image = cv2.resize(image,(300,300))
+    fragment = 50
+    image = cv2.resize(image,(300,300))[fragment:-fragment,fragment:-fragment]
 
-    image = lips_canny(image)
+    # image = lips_canny(image)
+    image = analyse(image)
     plt.imshow(image)
     plt.show()
     #plt.savefig(filename + "test2.PNG")
@@ -49,14 +52,16 @@ def analyse(image):
     dominant = palette[np.argmax(counts)]
     print(palette)
 
-    mask = get_mask("tongue_patches", greens, reds, blues, average)
+    mask = get_mask("cancer", greens, reds, blues, average)
 
-    image[mask] = (0, 0, 0, 255)
+    image[~mask] = (255, 0, 0, 255)
     return image
 
 def get_mask(t, greens, reds, blues, average):
     if (t == "lips"):
         mask = (greens < average[0]) | (reds < average[1]) | (blues < average[2])
     if (t == "tongue_patches"):
-        mask = (greens < 140) | (blues < 140) | (reds < 140)
+        mask = (greens < 130) | (blues < 130) | (reds < 130)
+    if (t == "cancer"):
+        mask = (greens > 100) | (blues > 100) | (reds > 100)
     return mask
