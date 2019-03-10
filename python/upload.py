@@ -45,3 +45,4 @@ def upload_file():
 def uploaded_file(filename):
     res = process_image(filename)
     return render_template('processing.html', file_name = filename)
+    
