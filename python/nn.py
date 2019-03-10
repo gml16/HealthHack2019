@@ -1,21 +1,37 @@
+import os
 import time
 import tqdm
 import numpy as np
 from keras.models import Sequential, model_from_json
-from keras.layers import Dense, Conv2D, Flatten
+from keras.layers import Dense, Conv1D, Flatten
 from sklearn.model_selection import KFold
+from PIL import Image
 
 
 def main():
-    path = input("Input path to dataset:\n> ")
-    dataset = np.loadtxt(path)
-    (x_train, y_train), (x_test, y_test) = get_images()
+    # path = input("Input path to dataset:\n> ")
+    path = "../dataset/"
+    files = os.listdir(path)
+    images = []
+    d = []
+    e= []
+    for i,file in enumerate(files):
+        print("Loading %s" % file)
+        images.append(np.asarray(Image.open("../dataset/" + file)))
+        if i == 25:
+            break
+    dataset = np.asarray(images)
+    print("Loading finished. Indexing...")
 
     n = 0
     for i,row in enumerate(dataset):
-        dataset[i] = row.append(n)
+        m = [0,0,0,0]
+        m[n] = 1
+        dataset[i] = np.append(row,m)
+        print(dataset[i][-4:])
         if (i > 0 and i % 100 == 0):
             n += 1
+    print("Indexing finished. Training...")
     # Label1 = syphilis
     # Label2 = herpes
     # Label3 = oral cancer
@@ -33,32 +49,40 @@ def main():
 def evaluate_architecture_keras(dataset):
 
     # Dataset style
-    X = dataset[:,:-1]
-    Y = dataset[:,-1]
+    X = dataset[:][:-4]
+    Y = dataset[:][-4:]
+
+    n = len(dataset)
+    m = int(0.8*n)
+    train_X = X[:m][:]
+    test_X = X[m:][:]
+
+    train_Y = Y[:m][:]
+    test_Y = Y[m:][:]
 
     # Define 10-fold cross validation test harness.
-    kfold = KFold(n_splits=10, shuffle=True)
+    # kfold = KFold(n_splits=10, shuffle=True)
     cvscores = []
 
-    for j,(train,test) in enumerate(kfold.split(X, Y)):
+    # for j,(train,test) in enumerate(kfold.split(X, Y)):
         # Create model.
-        model = Sequential()
+    model = Sequential()
 
-        model.add(Conv2D(64, kernel_size=3, activation=’relu’, input_shape=(28,28,1)))
-        model.add(Conv2D(32, kernel_size=3, activation=’relu’))
-        model.add(Flatten())
-        model.add(Dense(4, activation=’softmax’))
+    model.add(Dense(64, activation='relu', input_shape=(1,)))
+    model.add(Dense(32, activation='relu'))
+    model.add(Dense(1, activation='softmax'))
+    model.summary()
 
-        # Compile model.
-        model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+    # Compile model.
+    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-        # Fit the model.
-        model.fit(X[train], Y[train], epochs=3)
+    # Fit the model.
+    model.fit(train_X, train_Y, epochs=3)
 
         # Evaluate the model.
-        scores = model.evaluate(X[test], Y[test], verbose=0)
-        print("%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
-        cvscores.append(scores[1] * 100)
+    scores = model.evaluate(test_X, test_Y, verbose=0)
+    print("%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
+    cvscores.append(scores[1] * 100)
 
     mean = np.mean(cvscores)
     std = np.std(cvscores)
