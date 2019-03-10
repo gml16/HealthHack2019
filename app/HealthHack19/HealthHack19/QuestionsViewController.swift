@@ -82,9 +82,19 @@ class QuestionsViewController: UIViewController {
                "Please seek medical advice as this may be a Syphilitic infection",
                "This is probably a condition called Oral lichen plannus – this is nothing to worry about and there is no specific treatment – it should heal itself within the next few weeks. If this is not the case please seek medical advice.\nIf this hurts and progresses further please ask a pharmacist for advice.\nThis is an infectious condition – please be careful"]
         ),
+        // Order of prints
+        // q[0] - Yes - a[0]
+        // q[0] - No ->
+        //     q[1] - Yes - a[0]
+        //     q[1] - No ->
+        //         q[2] - Yes - a[1]
+        //         q[2] - No - a[0]
         dark_gums: Question(
-            q:["q"],
-            a:["a"]
+            q:["Are these discolouration patches painful?",
+               "Have they changed shape, size or colour?",
+               "Has this discolouration on your gums directly followed a dentist appointment or a specific mouth trauma?"],
+            a:["Please seek medical advice as soon as possible as you require further testing to make sure this is not a serious problem.",
+               "This is probably a bruising or an amalgam tattoo (due to dentist fillings) and can wait until your next dentist appointment for more specific diagnosis – however if you notice a change in size, colour or shape please seek faster medical advice and testing."]
         ),
         healthy: "our system has noot detected any anoomalies. If you are still woried, please contact your pharmacist for further recommendations."
     )
