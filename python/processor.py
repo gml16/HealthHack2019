@@ -1,63 +1,66 @@
 from copy import deepcopy
 import cv2
 import numpy as np
-from PIL import Image
 import matplotlib.pyplot as plt
 
-# from skimage import data, color
-# from skimage.transform import hough_circle, hough_circle_peaks
-# from skimage.feature import canny
-# from skimage.draw import circle_perimeter
-# from skimage.util import img_as_ubyte
-
-
-# # Load picture and detect edges
-# image = data.load("/Users/remiuzel/Documents/Scolarité/2016-2020 Imperial College London/2018-2019 3nd Year JMC/HealthHack2019/diagnostic_uploads/syphilis1.png")[:,:,0]
-# cv2.imshow('Edge', image)
-# cv2.waitKey(0)
-# image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
-# cv2.imshow('Edge', image)
-# cv2.waitKey(0)
-# image = cv2.fastNlMeansDenoisingColored(image,None,15,10,7,21)
-# cv2.imshow('Edge', image)
-# cv2.waitKey(0)
-# image = img_as_ubyte(image)[:,:,0]
-# cv2.imshow('Edge', image)
-# cv2.waitKey(0)
-# edges = canny(image, sigma=3, low_threshold=10, high_threshold=50)
-
-
-# # Detect two radii
-# hough_radii = np.arange(20, 35, 2)
-# hough_res = hough_circle(edges, hough_radii)
-
-# # Select the most prominent 5 circles
-# accums, cx, cy, radii = hough_circle_peaks(hough_res, hough_radii,
-#                                            total_num_peaks=3)
-
-# # Draw them
-# fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(10, 4))
-# image = color.gray2rgb(image)
-# for center_y, center_x, radius in zip(cy, cx, radii):
-#     circy, circx = circle_perimeter(center_y, center_x, radius)
-#     image[circy, circx] = (220, 20, 20)
-
-# ax.imshow(image, cmap=plt.cm.gray)
-# plt.show()
-
-
 def process_image(filename, _type):
-    image = np.array(Image.open(filename))
+    image = cv2.imread(filename)
     # image = lips_canny(image)
     fragment = 50
-    image = cv2.resize(image,(300,300))[fragment:-fragment,fragment:-fragment]
+    image = cv2.resize(image,(300,300))
 
-    # image = lips_canny(image)
-    image = analyse(image, _type)
-    plt.imshow(image)
-    plt.show()
-    #plt.savefig(filename + "test2.PNG")
-    return filename
+    res = fit_ellipse(image)
+    return res
+
+def fit_ellipse(image):
+    bilateral_filtered_image = cv2.fastNlMeansDenoisingColored(image,None,15,10,7,21)
+    #cv2.imshow('Edge', bilateral_filtered_image)
+    #cv2.waitKey(0)
+
+    '''
+    filtered = cv2.convertScaleAbs(bilateral_filtered_image, alpha=1.5)
+    cv2.imshow('Edge', filtered)
+    cv2.waitKey(0)
+    '''
+
+    imgray = cv2.cvtColor(bilateral_filtered_image,cv2.COLOR_BGR2GRAY)
+    cv2.imshow('Edge', imgray)
+    cv2.waitKey(0)
+
+    ret,thresh = cv2.threshold(imgray,175,255,0)
+    im2, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+    cv2.drawContours(image, contours, -1, (0,255,0), 3)
+    cv2.imshow('Edge', image)
+    cv2.waitKey(0)
+
+    max_cnt = max(contours, key=cv2.contourArea)
+    ellipse = cv2.fitEllipse(max_cnt)
+    ellipse_pnts = cv2.ellipse2Poly( (int(ellipse[0][0]),int(ellipse[0][1]) ) ,( int(ellipse[1][0]),int(ellipse[1][1]) ),int(ellipse[2]),0,360,1)
+    comp = cv2.matchShapes(max_cnt,ellipse_pnts,1,0.0)
+    res = 1
+    for p in ellipse_pnts:
+        if p[0]>0 and p[0] < 200 and p[1]>0 and p[1] < 200:
+            image[p[0], p[1]]=[0,0,255]
+        else:
+            res = 0
+    cv2.imshow('Edge', image)
+    cv2.waitKey(0)
+    return res
+
+def find_contours(image):
+
+    bilateral_filtered_image = cv2.fastNlMeansDenoisingColored(image,None,15,10,7,21)
+    cv2.imshow('Edge', bilateral_filtered_image)
+    cv2.waitKey(0)
+
+    imgray = cv2.cvtColor(bilateral_filtered_image,cv2.COLOR_BGR2GRAY)
+    cv2.imshow('Edge', imgray)
+    cv2.waitKey(0)
+    ret,thresh = cv2.threshold(imgray,150,255,0)
+    im2, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+    cv2.drawContours(image, contours, -1, (0,255,0), 3)
+    cv2.imshow('Edge', image)
+    cv2.waitKey(0)
 
 def lips_canny(image):
     image = image[: , :, :3]
@@ -65,15 +68,37 @@ def lips_canny(image):
     bilateral_filtered_image = cv2.fastNlMeansDenoisingColored(image,None,15,10,7,21)
     cv2.imshow('Edge', bilateral_filtered_image)
     cv2.waitKey(0)
-    edge_detected_image = cv2.Canny(bilateral_filtered_image, 30, 35)
-    cv2.imshow('Edge', edge_detected_image)
+    edges = cv2.Canny(bilateral_filtered_image, 54, 56)
+    cv2.imshow('Edge', edges)
     cv2.waitKey(0)
-    gray = cv2.cvtColor(edge_detected_image, cv2.COLOR_BGR2GRAY)
-    circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1.2, 100)
-    #c = plt.Circle((circles[0,0, 0],circles[0,0,1]), circles[0,0,2])
-    #cv2.circle(img, center, radius
+
+
+    '''
+    circles = cv2.HoughCircles(edges, cv2.HOUGH_GRADIENT, 0.5, 100)
     print(circles)
-    return edge_detected_image
+    cv2.imshow('Edge', circles)
+    cv2.waitKey(0)
+    '''
+
+    '''
+    #imgray = cv2.cvtColor(edges, cv2.COLOR_BGR2GRAY)
+    #cv2.imshow('Edge', imgray)
+    #cv2.waitKey(0)
+    ret,thresh = cv2.threshold(edges,127,255,0)
+    im2, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+
+    cv2.imshow('Edge', im2)
+    cv2.waitKey(0)
+    '''
+
+
+    '''
+
+    cv2.drawContours(edges, contours, -1, (0,255,0), 3)
+    cv2.imshow('Edge', edges)
+    cv2.waitKey(0)
+    '''
+    return image
 
 def analyse(image, _type):
     RED, GREEN, BLUE = (2, 1, 0)
@@ -96,7 +121,7 @@ def analyse(image, _type):
 
     mask = get_mask(_type, greens, reds, blues, average)
     image[~mask] = (255, 0, 0, 255)
-    
+
     return image
 
 def get_mask(_type, greens, reds, blues, average):
