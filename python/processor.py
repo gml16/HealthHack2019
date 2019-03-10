@@ -17,12 +17,19 @@ def process_image(filenames):
     # Setup baseline healthy flags.
     flags = "0000"
     flags = list(flags)
+    
+    # TODO
+    # flags[0] = analyse(images[0], "tongue_ulcer")
+    # print("WARNING: Updated flag %s" % flags)
+
     flags[1] = fit_ellipse(filenames[1])
-    print("WARNING: Updated flag %s" % flags)
+    print("WARNING: Updated flag %s" % flags, end="\n\n")
+
     flags[2] = analyse(images[2], "tongue_patch")
-    print("WARNING: Updated flag %s" % flags)
+    print("WARNING: Updated flag %s" % flags, end="\n\n")
+
     flags[3] = analyse(images[3], "gums")
-    print("WARNING: Updated flag %s" % flags)
+    print("WARNING: Updated flag %s" % flags, end="\n\n")
 
     # t_patch = analyse(images[2], "tongue_patch")
     # g_patch = analyse(images[3], "gums")
@@ -74,30 +81,19 @@ def analyse(image, _type):
 
     masks = {
         "lips": (greens < average[0]) | (reds < average[1]) | (blues < average[2]),
+        "tongue_ulcer": True,
         "tongue_patch": (greens < 130) | (blues < 130) | (reds < 130),
         "gums": (greens > 100) | (blues > 100) | (reds > 100)
     }
 
-    n_colors = 3
-    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 200, .1)
-    flags = cv2.KMEANS_RANDOM_CENTERS
-
-    _, labels, palette = cv2.kmeans(pixels, n_colors, None, criteria, 10, flags)
-    _, counts = np.unique(labels, return_counts=True)
-
-    dominant = palette[np.argmax(counts)]
-
     mask = masks[_type]
     image[~mask] = (255, 0, 0, 255)
-
+    
     return flag(image, _type)
-
-    return image
+    # return image
 
 # Checks if the image presents substancial symptoms.
 def flag(image, _type):
-
-    # Set conditions
 
     # Go through the image and calculate how much of it is in the ROI
     size = image.shape[0] * image.shape[1]
