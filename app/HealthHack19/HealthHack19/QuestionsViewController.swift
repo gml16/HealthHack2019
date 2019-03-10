@@ -15,6 +15,7 @@ class QuestionsViewController: UIViewController {
         var chancre: Question
         var white_patches: Question
         var dark_gums: Question
+        var healthy: String
     }
     
     struct Question {
@@ -35,11 +36,12 @@ class QuestionsViewController: UIViewController {
                 " This a not something to worry about, what you have are called cold sores and are most probably experiencing an outburst of Oral Herpes. Over 80% of the adult population is infected and experience similar symptoms regularly. \n If these symptoms persist for over 10 to 14 days, we would recommend seeing a medical professional.\n If you are experiencing any pain, please see a pharmacist as he will be able to prescribe some medication that may help alleviate pain and symptoms. \n Please also note, even though this is not a serious condition it is highly infectious and so you should be particularly cautious around babies and young children. \n https://www.nhs.uk/conditions/cold-sores/"]
         ),
         // Order of print:
-        // Q1 Yes - a[0]
-        // Q2 Yes - a[1]
-        // Q3 No - a[4]
-        // Q4 Yes / Q5 Yes - a[2]
-        // Q4 Yes / Q5 No - a[3]
+        // q[0] Yes - a[0]
+        // q[1] Yes - a[1]
+        // q[2] No - a[4]
+        // q[3] Yes ->
+        //     q[4] Yes - a[2]
+        //     q[4] No - a[3]
         chancre: Question(
             q:["Have you noticed similar sores on any other part of your body? More specifically your genital area or your hands?",
                "Have you suffered from a malaise, fever, headache or any joint pain since the first onset of your symptoms?",
@@ -51,14 +53,40 @@ class QuestionsViewController: UIViewController {
                "This is not an urgent matter as long as none of the above symptoms appear, however we would recommend contacting a medical professional as this may be a sign of a more systematic problem. https://www.nhs.uk/conditions/mouth-ulcers/",
                "If this have not healed within 3 to 6 weeks of its first appearances please contact a medical professional. In the meantime, if you feel any particular pain or discomfort, we would recommend asking for the advice or a pharmacist https://www.nhs.uk/conditions/mouth-ulcers/"]
         ),
+        // Order of prints:
+        // q[0] No ->
+        //    q[1] - No - a[0]
+        //    q[1] - Yes - a[1]
+        //        q[2] - Yes - a[2]
+        //        q[2] - No - a[3]
+        // q[0] Yes ->
+        //    q[3] - Yes - a[4]
+        //    q[3] - No ->
+        //        q[4] - Yes - a[5]
+        //        q[4] - No ->
+        //            q[5] - Yes - a[6]
+        //            q[5] - No - a[7]
         white_patches: Question(
-            q:["q"],
-            a:["a"]
+            q:["After cleaning your mouth & tongue with a soft toothbrush do you still notice this white coating?",
+               "Does it regularly come back within a couple of days?",
+               "Have these patches lasted longer than two weeks?",
+               "This may indicate a range of different conditions. To help us advise you further please answer the following questions:\n Are you a smoker? Have you noticed any unexplained weight loss? Has this worsened over the last 10 days?",
+               "Are these white plaques limited to the tongue?",
+               "Have you noticed any other problems or sores around your body? Specifically, around your hands or genital area?"],
+            a:["This is nothing to worry about, if it persists for more than 2 or 3 weeks please contact a medical professional as a more thorough investigation may need to be performed.",
+               "This is indicative of a condition called Oral Leukoplakia:  “Excessive cell growth in the mouth produces white patches on the tongue, this is a condition known as leukoplakia. Tobacco users are more prone to it than non-smokers.",
+               "Please contact your dentist or another medical professional as this may be an early sign of oral cancer.",
+               "This is nothing to worry about for now, however if these symptoms persist then please contact a medical professional",
+               "Contact a medical professional as this may require a more thorough investigation to make sure this isn’t oral cancer.",
+               "If these have persisted for more than 2 weeks please seek further medical attention",
+               "Please seek medical advice as this may be a Syphilitic infection",
+               "This is probably a condition called Oral lichen plannus – this is nothing to worry about and there is no specific treatment – it should heal itself within the next few weeks. If this is not the case please seek medical advice.\nIf this hurts and progresses further please ask a pharmacist for advice.\nThis is an infectious condition – please be careful"]
         ),
         dark_gums: Question(
             q:["q"],
             a:["a"]
-        )
+        ),
+        healthy: "our system has noot detected any anoomalies. If you are still woried, please contact your pharmacist for further recommendations."
     )
     
     
