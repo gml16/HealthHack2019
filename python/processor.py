@@ -1,79 +1,75 @@
 from copy import deepcopy
 import cv2
 import numpy as np
-from PIL import Image
 import matplotlib.pyplot as plt
+from PIL import Image
 
-# from skimage import data, color
-# from skimage.transform import hough_circle, hough_circle_peaks
-# from skimage.feature import canny
-# from skimage.draw import circle_perimeter
-# from skimage.util import img_as_ubyte
+def process_image(filenames):
 
+    images = [cv2.resize(np.array(Image.open(filename)),(300,300)) for filename in filenames]
 
-# # Load picture and detect edges
-# image = data.load("/Users/remiuzel/Documents/Scolarité/2016-2020 Imperial College London/2018-2019 3nd Year JMC/HealthHack2019/diagnostic_uploads/syphilis1.png")[:,:,0]
-# cv2.imshow('Edge', image)
-# cv2.waitKey(0)
-# image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
-# cv2.imshow('Edge', image)
-# cv2.waitKey(0)
-# image = cv2.fastNlMeansDenoisingColored(image,None,15,10,7,21)
-# cv2.imshow('Edge', image)
-# cv2.waitKey(0)
-# image = img_as_ubyte(image)[:,:,0]
-# cv2.imshow('Edge', image)
-# cv2.waitKey(0)
-# edges = canny(image, sigma=3, low_threshold=10, high_threshold=50)
-
-
-# # Detect two radii
-# hough_radii = np.arange(20, 35, 2)
-# hough_res = hough_circle(edges, hough_radii)
-
-# # Select the most prominent 5 circles
-# accums, cx, cy, radii = hough_circle_peaks(hough_res, hough_radii,
-#                                            total_num_peaks=3)
-
-# # Draw them
-# fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(10, 4))
-# image = color.gray2rgb(image)
-# for center_y, center_x, radius in zip(cy, cx, radii):
-#     circy, circx = circle_perimeter(center_y, center_x, radius)
-#     image[circy, circx] = (220, 20, 20)
-
-# ax.imshow(image, cmap=plt.cm.gray)
-# plt.show()
-
-
-def process_image(filename, _type):
-    image = np.array(Image.open(filename))
-    # image = lips_canny(image)
     fragment = 50
-    image = cv2.resize(image,(300,300))[fragment:-fragment,fragment:-fragment]
 
-    # image = lips_canny(image)
-    image = analyse(image, _type)
-    plt.imshow(image)
-    plt.show()
-    #plt.savefig(filename + "test2.PNG")
-    return filename
+    # Remove sides for dark and white patch detection.
+    images[2] = images[2][fragment:-fragment,fragment:-fragment]
+    images[3] = images[3][fragment:-fragment,fragment:-fragment]
 
-def lips_canny(image):
-    image = image[: , :, :3]
-    # = cv2.bilateralFilter(image, 5, 150, 150)
+    # Setup baseline healthy flags.
+    flags = "0000"
+    flags = list(flags)
+    
+    # TODO
+    # flags[0] = analyse(images[0], "tongue_ulcer")
+    # print("WARNING: Updated flag %s" % flags)
+
+    flags[1] = fit_ellipse(filenames[1])
+    print("WARNING: Updated flag %s" % flags, end="\n\n")
+
+    flags[2] = analyse(images[2], "tongue_patch")
+    print("WARNING: Updated flag %s" % flags, end="\n\n")
+
+    flags[3] = analyse(images[3], "gums")
+    print("WARNING: Updated flag %s" % flags, end="\n\n")
+
+    # t_patch = analyse(images[2], "tongue_patch")
+    # g_patch = analyse(images[3], "gums")
+    # plt.imshow(t_patch)
+    # plt.show()
+    # plt.imshow(g_patch)
+    # plt.show()
+
+    return "".join(flags)
+
+def fit_ellipse(filename):
+    image = cv2.imread(filename)
+    image = cv2.resize(image, (300,300))
+
     bilateral_filtered_image = cv2.fastNlMeansDenoisingColored(image,None,15,10,7,21)
-    cv2.imshow('Edge', bilateral_filtered_image)
-    cv2.waitKey(0)
-    edge_detected_image = cv2.Canny(bilateral_filtered_image, 30, 35)
-    cv2.imshow('Edge', edge_detected_image)
-    cv2.waitKey(0)
-    gray = cv2.cvtColor(edge_detected_image, cv2.COLOR_BGR2GRAY)
-    circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1.2, 100)
-    #c = plt.Circle((circles[0,0, 0],circles[0,0,1]), circles[0,0,2])
-    #cv2.circle(img, center, radius
-    print(circles)
-    return edge_detected_image
+
+    imgray = cv2.cvtColor(bilateral_filtered_image,cv2.COLOR_BGR2GRAY)
+    # cv2.imshow('Edge', imgray)
+    # cv2.waitKey(0)
+
+    ret,thresh = cv2.threshold(imgray,175,255,0)
+    im2, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+    cv2.drawContours(image, contours, -1, (0,255,0), 3)
+    # cv2.imshow('Edge', image)
+    # cv2.waitKey(0)
+
+    max_cnt = max(contours, key=cv2.contourArea)
+    ellipse = cv2.fitEllipse(max_cnt)
+    ellipse_pnts = cv2.ellipse2Poly( (int(ellipse[0][0]),int(ellipse[0][1]) ) ,( int(ellipse[1][0]),int(ellipse[1][1]) ),int(ellipse[2]),0,360,1)
+    comp = cv2.matchShapes(max_cnt,ellipse_pnts,1,0.0)
+    flag = "1"
+    for p in ellipse_pnts:
+        if p[0]>0 and p[0] < 200 and p[1]>0 and p[1] < 200:
+            image[p[0], p[1]]=[0,0,255]
+        else:
+            flag = "0"
+    # cv2.imshow('Edge', image)
+    # cv2.waitKey(0)
+    return flag
+
 
 def analyse(image, _type):
     RED, GREEN, BLUE = (2, 1, 0)
@@ -81,31 +77,43 @@ def analyse(image, _type):
     greens = image[:, :, GREEN]
     blues = image[:, :, BLUE]
     average = image.mean(axis=0).mean(axis=0)
-
     pixels = np.float32(image.reshape(-1, 4))
 
-    n_colors = 3
-    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 200, .1)
-    flags = cv2.KMEANS_RANDOM_CENTERS
+    masks = {
+        "lips": (greens < average[0]) | (reds < average[1]) | (blues < average[2]),
+        "tongue_ulcer": True,
+        "tongue_patch": (greens < 130) | (blues < 130) | (reds < 130),
+        "gums": (greens > 100) | (blues > 100) | (reds > 100)
+    }
 
-    _, labels, palette = cv2.kmeans(pixels, n_colors, None, criteria, 10, flags)
-    _, counts = np.unique(labels, return_counts=True)
-
-    dominant = palette[np.argmax(counts)]
-    print(palette)
-
-    mask = get_mask(_type, greens, reds, blues, average)
+    mask = masks[_type]
     image[~mask] = (255, 0, 0, 255)
     
-    return image
+    return flag(image, _type)
+    # return image
 
-def get_mask(_type, greens, reds, blues, average):
-    if (_type == "lips"): # TODO - DETECT OVAL INSTEAD OF APPLYING MASK
-        mask = (greens < average[0]) | (reds < average[1]) | (blues < average[2])
-    if (_type == "tongue_patch"):
-        mask = (greens < 130) | (blues < 130) | (reds < 130)
-    if (_type == "tongue_ulcer"): # TODO - DETECT OVAL INSTEAD OF APPLYING MASK
-        mask = (greens < 130) | (blues < 130) | (reds < 130)
+# Checks if the image presents substancial symptoms.
+def flag(image, _type):
+
+    # Go through the image and calculate how much of it is in the ROI
+    size = image.shape[0] * image.shape[1]
+    roi = image[:,:,0]
+    r = 0
+    for row in roi:
+        for p in row:
+            if p == 255:
+                r += 1
+    part = (r / size) * 100
+
     if (_type == "gums"):
-        mask = (greens > 100) | (blues > 100) | (reds > 100)
-    return mask
+        # Be extremely sensible as small dark patches are never good.
+        print("There are %.2f%% of cancer places" % (part))
+        return "1" if part > 5 else "0"
+
+    elif (_type == "tongue_patch"):
+        # Be more leenient for white patches.
+        print("There are %.2f%% of white places" % (part))
+        return "1" if part > 12 else "0"
+    else:
+        # Cold sore case - TODO
+        pass
