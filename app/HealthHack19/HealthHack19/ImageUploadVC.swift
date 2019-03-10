@@ -25,9 +25,10 @@ class ImageUploadVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
     
     
     //Variables
-    var bgColour: UIColor?
     var image: UIImage?
     let picker = UIImagePickerController()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -44,7 +45,7 @@ class ImageUploadVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
         let logoutPopup = UIAlertController(title: "Choose source", message:
             nil, preferredStyle: .actionSheet)
         let PictureUpload = UIAlertAction(title: "Select Picture", style: .default) { (buttonTapped) in
-            self.present(self.picker, animated: true, completion: nil)
+            self.checkLibraryPermission()
         }
         let CancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         let TakePicture = UIAlertAction(title: "Take Picture", style: .default) { (buttonTapped) in
@@ -59,8 +60,11 @@ class ImageUploadVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
     }
     
     @IBAction func UploadImagesPressed(_ sender: Any) {
-        //TODO upload picture and proces
-        
+        if image != nil{
+            if let vc = self.storyboard?.instantiateViewController(withIdentifier: "PicturesVC") as! MorePicsViewController? {
+            self.present(vc, animated: true, completion: nil)
+            }
+        }
     }
     
     
@@ -90,6 +94,7 @@ class ImageUploadVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
             let myPickerController = UIImagePickerController()
             myPickerController.delegate = self;
             myPickerController.sourceType = .photoLibrary
+            myPickerController.allowsEditing = true
             self.present(myPickerController, animated: true, completion: nil)
         }
     }
@@ -111,6 +116,7 @@ class ImageUploadVC: UIViewController, UIImagePickerControllerDelegate, UINaviga
             userImage.contentMode = .scaleAspectFill
             userImage.image = selImage
             image = selImage
+            IMAGE_TOUNGE = selImage
         } else {
             self.userImage.backgroundColor = #colorLiteral(red: 0.4784313725, green: 0.5058823529, blue: 1, alpha: 1)
         }
