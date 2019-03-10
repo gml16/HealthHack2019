@@ -14,8 +14,9 @@ def process_image(filenames):
     images[2] = images[2][fragment:-fragment,fragment:-fragment]
     images[3] = images[3][fragment:-fragment,fragment:-fragment]
 
-    # Setup baseline healthy flags. 
+    # Setup baseline healthy flags.
     flags = "0000"
+    flags = list(flags)
     flags[1] = fit_ellipse(filenames[1])
     print("WARNING: Updated flag %s" % flags)
     flags[2] = analyse(images[2], "tongue_patch")
@@ -30,7 +31,7 @@ def process_image(filenames):
     # plt.imshow(g_patch)
     # plt.show()
 
-    return flag
+    return "".join(flags)
 
 def fit_ellipse(filename):
     image = cv2.imread(filename)
@@ -88,7 +89,7 @@ def analyse(image, _type):
 
     mask = masks[_type]
     image[~mask] = (255, 0, 0, 255)
-    
+
     return flag(image, _type)
 
     return image
@@ -111,12 +112,12 @@ def flag(image, _type):
     if (_type == "gums"):
         # Be extremely sensible as small dark patches are never good.
         print("There are %.2f%% of cancer places" % (part))
-        return "1" if part > 5 else "0"    
+        return "1" if part > 5 else "0"
 
     elif (_type == "tongue_patch"):
         # Be more leenient for white patches.
         print("There are %.2f%% of white places" % (part))
-        return "1" if part > 12 else "0"    
+        return "1" if part > 12 else "0"
     else:
         # Cold sore case - TODO
         pass
